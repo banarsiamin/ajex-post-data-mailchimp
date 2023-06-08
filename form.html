@@ -1,0 +1,93 @@
+<form class="form-inline" action="https://subdoma***.****.list-manage.com/subscribe/post-json?u=*****************&amp;id=*************&c=?" method="get" accept-charset="utf-8" name="signup-form-page" id="signup-form-page" data-list-id="4">
+            <input type="hidden"  name="u" value="************">
+            <input type="hidden"  name="id" value="***********">
+            <!-- <input type="hidden"  name="c" value=""> -->
+            <input type="text" class="form-control required" id="Name" name="FNAME" placeholder="First name *" required>
+            <input type="text" class="form-control required" id="Lastname" name="LNAME" placeholder="Last name *" required>
+            <input type="email" class="form-control required" id="email" name="EMAIL" placeholder="Email *" required>
+            <input type="text" class="form-control required" id="Company" name="COMPANY" placeholder="Company *" required>
+            <input type="text" class="form-control required" id="Primarybusiness" name="BIZTYPE" placeholder="Primary business">
+            <input type="text" class="form-control required" id="Website" name="WEBSITE" placeholder="Website *" required>
+            <input type="text" class="form-control required" id="Phonenumber" name="PHONE" placeholder="Phone number *" required>
+            <input type="text" class="form-control required" id="Country" name="COUNTRY" placeholder="Country *" required> &nbsp;&nbsp;&nbsp;&nbsp;
+
+            <p class="sub" style="margin-top: -10px;font-family: Raleway,sans-serif;">
+				<input type="checkbox" class="form-control required" id="WantsOffer" name="MARKETING" value="I'd like to hear about marketing opportunities" onclick="changeValueCheckbox(this,8)">
+                <font color="white">I'd like to hear about marketing opportunities</font>
+            </p>
+                 &nbsp;&nbsp;&nbsp;&nbsp;
+            <p class="sub" style="margin-top: -10px;font-family: Raleway,sans-serif;">
+				<input type="checkbox" class="form-control required" id="PrivacyPolicy" name="TANDC" value="I accept IQ Magazine's Terms & Conditions and Privacy Policy" onclick="changeValueCheckbox(this,9)" required>
+                <font color="white">I accept IQ Magazine's <a href="/terms-and-conditions/" target="_blank">Terms and Conditions</a> and <a href="/privacy/" target="_blank">Privacy Policy</a></font>
+            </p>
+				
+				
+            </br><div class="g-recaptcha" data-sitekey="6Lf3ZWsdAAAAACPgm4EI3wgqFZbsRUr6RusTOpOR"></div>
+            <input type="hidden" name="b_0fd897d0bc2b2676d4100f69f_063ec3509a" tabindex="-1" value="">
+            <button id="submit-btn-page" type="submit" class="btn btn-default">Sign up</button>
+            <p id="status-page" class="warning" style="color:#ffffff;"></p>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+function changeValueCheckbox(element,ty) {
+    if (element.checked && ty==8) {
+        element.value = "I'd like to hear about marketing opportunities";
+    } else if (element.checked && ty==9) {
+        element.value = "I accept IQ Magazine's Terms & Conditions and Privacy Policy";
+    } else {
+        element.value = 'NO';
+    }
+}
+jQuery(document).ready(function ($) {
+  jQuery("#signup-form-page").submit(function(e) {
+        e.preventDefault();	
+        var form = jQuery(this);
+        var data = form.serializeArray();
+        //console.log(data);
+        //return false;
+        $(data).each(function(index,field) {
+  			if(field.name == 'g-recaptcha-response'){
+                  if(field.value == ''){
+                      $('.g-recaptcha').addClass('error');
+                      event.preventDefault();
+                      return false;
+               	 }else{
+                        $('.g-recaptcha').removeClass('error');
+                        var url = form.attr('action');
+                        jQuery.ajax({
+                                type: "get",
+                                url: url,
+                                cache       : false,
+                                dataType    : 'json',
+                                contentType: "application/json; charset=utf-8",
+                                data: form.serialize(),                    
+                                success: function(data){	
+                                    document.getElementById("signup-form-page").reset();
+                                   alert("Submitted Successfull");
+                                },    
+                                beforeSend: setHeader
+                        });
+                        jQuery("#status-page").text("We sent you an email to confirm your subscription. Please check spam folders if it hasn't arrived.");
+                        jQuery("#status-page").addClass('success');
+                        jQuery('button#submit-btn-page').slideUp(); 
+                    }
+            }
+            
+        });
+          console.log('sad');
+          
+		});        
+    });
+    function setHeader(xhr) {
+        xhr.setRequestHeader('contentType', 'Application/json');
+        xhr.setRequestHeader('crossDomain', true);
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    }
+</script><style>
+.g-recaptcha.error {
+	border: 2px solid red;
+	width: 307px;
+}
+</style>
